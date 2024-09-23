@@ -1,0 +1,74 @@
+1. inserción, modificación y eliminación para Proveedor, Compra y Detalle Compra:
+
+Inserción:
+-- Insertar un proveedor
+INSERT INTO Proveedor (id_proveedor, nombre, direccion, telefono) 
+VALUES (1, 'Proveedor A', 'Calle 123', '987654321');
+
+-- Insertar una compra
+INSERT INTO Compra (id_compra, id_cliente, fecha, total) 
+VALUES (1, 1, '2024-09-22', 500);
+
+-- Insertar un detalle de compra
+INSERT INTO DetCompra (id_detalle, id_compra, id_producto, cantidad, precio_unitario) 
+VALUES (1, 1, 10, 5, 100);
+
+Modificación:
+-- Modificar datos de un proveedor
+UPDATE Proveedor 
+SET nombre = 'Proveedor B', direccion = 'Calle 456', telefono = '123456789' 
+WHERE id_proveedor = 1;
+
+-- Modificar una compra
+UPDATE Compra 
+SET total = 600 
+WHERE id_compra = 1;
+
+-- Modificar un detalle de compra
+UPDATE DetCompra 
+SET cantidad = 10, precio_unitario = 95 
+WHERE id_detalle = 1;
+
+Eliminación:
+-- Eliminar un proveedor
+DELETE FROM Proveedor 
+WHERE id_proveedor = 1;
+
+-- Eliminar una compra
+DELETE FROM Compra 
+WHERE id_compra = 1;
+
+-- Eliminar un detalle de compra
+DELETE FROM DetCompra 
+WHERE id_detalle = 1;
+
+
+2. Listar todas las compras con los datos del cliente dado un año y mes:
+
+SELECT Compra.id_compra, Cliente.nombre, Compra.fecha, Compra.total 
+FROM Compra 
+INNER JOIN Cliente ON Compra.id_cliente = Cliente.id_cliente 
+WHERE YEAR(Compra.fecha) = 2023 AND MONTH(Compra.fecha) = 9;
+
+
+3. Listar Número, Fecha y Total de todas las compras y ventas:
+
+-- Para compras
+SELECT id_compra AS Numero, fecha, total 
+FROM Compra;
+
+-- Para ventas (si existiera una tabla de ventas similar a la de compras)
+SELECT id_venta AS Numero, fecha, total 
+FROM Venta;
+
+
+4. Listar todas las producciones del año 2020 que contengan las 5 cecinas más vendidas:
+
+SELECT Produccion.id_produccion, Cecina.nombre, SUM(DetVenta.cantidad) AS TotalVendido 
+FROM Produccion 
+INNER JOIN Cecina ON Produccion.id_cecina = Cecina.id_cecina 
+INNER JOIN DetVenta ON Cecina.id_cecina = DetVenta.id_cecina 
+WHERE YEAR(Produccion.fecha) = 2020 
+GROUP BY Cecina.id_cecina 
+ORDER BY TotalVendido DESC 
+LIMIT 5;
